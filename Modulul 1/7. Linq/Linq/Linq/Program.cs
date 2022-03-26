@@ -11,26 +11,33 @@ namespace Linq
     {
         public static void Main(string[] args)
         {
-            //  Filtering();
-            //  Ordering();
-            //  Quantifiers();
-            //  Ordering();
-            //  Projection();
-            //  Grouping();
-            //  Generation();
-            //  ElementOperators();
-            //  DataConversion(); 
-            //  Aggregation();
-            //  SetOperations();
-            //  Joins();
+            /* Filtering();
+             Ordering();
+             Quantifiers();
+             Ordering();
+             Projection();
+             Grouping();
+             Generation();
+             ElementOperators();
+             DataConversion(); 
+             Aggregation();
+             SetOperations();
+             Joins();*/
+            //Query1(); 
 
-            Bike b = new Bike { Model = "Whistler 29R", Year = 2019, Weight = 13.5f, HasSuspension = true, ProducerId = "1" };
+            Ex1();
+            Ex2();
+            Ex3();
+            Ex4();
+            Ex5();
+
+          /*  Bike b = new Bike { Model = "Whistler 29R", Year = 2019, Weight = 13.5f, HasSuspension = true, ProducerId = "1" };
             User u = new User("Luky", "1234", "Luky@gmail.com");
             Order o = new Order(4500.00f, u, "Strada x", "0727217166");
-
+            
             Console.WriteLine(b.GetBikeCoeficient());
             Console.WriteLine(u.GetUsernameAndEmail());
-            Console.WriteLine(o.GetDiscountedPrice(0.20f));
+            Console.WriteLine(o.GetDiscountedPrice(0.20f));*/
 
 
         }
@@ -216,7 +223,7 @@ namespace Linq
             foreach (var KeyValurPair in lookup)
             {
                 Console.WriteLine(KeyValurPair.Key);
-                // Lookup employees by Department  
+   
                 foreach (var item in lookup[KeyValurPair.Key])
                 {
                     Console.WriteLine("\t" + item.Model + "\t" + item.Year + "\t" + item.Weight);
@@ -229,7 +236,8 @@ namespace Linq
             // Aggregate
             Console.WriteLine("Aggregate");
             var allNames = _bikes.Aggregate("", (previewsResult, bike) => previewsResult + bike.Model, allNames => allNames);
-            PrintCollection(allNames);
+            Console.WriteLine(allNames);
+          // PrintCollection(allNames);
             // Average
             Console.WriteLine("Average");
             var averageWeight = _bikes.Average(x => x.Weight);
@@ -240,7 +248,7 @@ namespace Linq
             var count = _bikes.Distinct().Count();
             Console.WriteLine(count);
 
-            // Max, MaxBy
+            // Max, MaxBy ( MaxBy imi returneaza obiectul care are maximul)
             Console.WriteLine("Max");
             var maxYear = _bikes.Max(x => x.Year);
             Console.WriteLine(maxYear);
@@ -274,7 +282,7 @@ namespace Linq
 
             // Except, ExeceptBy
             Console.WriteLine("ExceptBy");
-            var except = _bikes.Except(_bikes2).ToList();
+            var except = _bikes.ExceptBy(_bikes2, x => x).ToList();
             PrintCollection(except);
 
             // Intersect, IntersectBy
@@ -308,6 +316,12 @@ namespace Linq
             var producersByBike = from bike in _bikes
                                      join producer in _producers on bike.ProducerId equals producer.Id
                                      select new { bike, producer.Name };
+
+            var producersByBike2 = _bikes.Join(
+                                _producers,
+                                bike => bike.ProducerId,
+                                producer => producer.Id,
+                                (bike,producer) => new { bike, producer.Name });
 
             PrintCollection(producersByBike);
 
@@ -353,7 +367,7 @@ namespace Linq
 
                 new Bike { Model = "Nirvana Tour", Year = 2022, Weight = 12.0f, HasSuspension = true, ProducerId = "4"},
                 new Bike { Model = "Kato", Year = 2022, Weight = 13.0f, HasSuspension = true, ProducerId = "4"},
-                new Bike { Model = "Lanao", Year = 2022, Weight = 12.5f, HasSuspension = true, ProducerId = "4"},
+                new Bike { Model = "Lanao", Year = 2019, Weight = 12.5f, HasSuspension = false, ProducerId = "4"},
                 new FullSuspensionBike { Model = "Whistler 29RR", Year = 2019, HasSuspension = true, ProducerId = "1", BackSuspension = "RockShox"}
               
             };
@@ -370,6 +384,86 @@ namespace Linq
                 new Producer { Name = "GHOST", Id = "4" ,  Models = new List<Bike>{ new Bike() { Model = "7" }, new Bike() { Model = "8" } } }
 
             };
+        }
+
+        public static void Query1()
+        {
+            Console.WriteLine("Query 1");
+            var result = _bikes.Join(
+                               _producers,
+                               bike => bike.ProducerId,
+                               producer => producer.Id,
+                               (bike,producer) => new {bike.Year, bike.Weight, bike.HasSuspension,producer.Name})
+                          .Where(x => x.Year == 2019 && !x.HasSuspension && x.Weight <=14)
+                          .Count();
+            Console.WriteLine(result);
+              
+
+        }
+
+        /// Exercices
+        
+        public static void Ex1()
+        {
+            Console.WriteLine("Ex1");
+            var array = new int[] { 8, 2, 3, 3, 5, 6, 5, 8, 9, 10, 1, 12, 2, 2, 25, 8, 16, 2 };
+            var result = array.GroupBy(x => x)
+                .ToDictionary(x => x.Key, y => y.Count());
+            foreach(KeyValuePair<int, int> pair in result)
+            {
+                Console.WriteLine("numar "+ pair.Key +" , repetitii: "+pair.Value);
+            }
+        }
+        public static void Ex2()
+        {
+            Console.WriteLine("\nEx2");
+            var array = new int[] { 8, 2, 3, 3, 5, 6, 5, 8, 9, 10, 1, 12, 2, 2, 25, 8, 16, 2 };
+            var result = array.GroupBy(x => x)
+                .ToDictionary( x=> x.Key, y => y.Count())
+                .Aggregate((a,b) => a.Value>b.Value? a :b);
+            Console.WriteLine("Numarul care se repeta de cele mai multe ori este "+ result.Key);
+        }
+        public static void Ex3()
+        {
+            Console.WriteLine("\nEx3");
+            string[] first = new string[] { "hello", "hi", "max", "good evening", "good day", "good morning", "goodbye" };
+            string[] second = new string[] { "whatsup", "how are you", "hello", "bye", "maybe", "hi" };
+
+            var result = first.Intersect(second)
+                .Where(x => x.StartsWith("h"));
+            PrintCollection(result);
+        }
+        public static void Ex4()
+        {
+            Console.WriteLine("\nEx4");
+            string[] first = new string[] { "hello", "hi", "max", "good evening", "good day", "good morning", "goodbye" };
+            string[] second = new string[] { "whatsup", "how are you", "hello", "bye", "maybe", "hi" };
+
+            var result = first.Aggregate("", (prev, s) => prev + s.Last(), result => result);
+            Console.WriteLine(result);
+
+        }
+
+        public static void Ex5()
+        {
+            Console.WriteLine("\nEx5");
+            var result = _producers.Join(
+                        _bikes,
+                        producer => producer.Id,
+                        bike => bike.ProducerId,
+                        (producer, bike) => new
+                        {
+                            Name = producer.Name,
+                            Weight = bike.Weight
+                        }
+                    )
+                .GroupBy(x => x.Name)
+                .ToDictionary(x => x.Key, y => y.Sum(z => z.Weight))
+                .OrderBy(x => x.Value);
+            foreach(KeyValuePair<string,double> pair in result)
+            {
+                Console.WriteLine(pair.Key +" "+ pair.Value.ToString("n2"));
+            }
         }
     }
 }

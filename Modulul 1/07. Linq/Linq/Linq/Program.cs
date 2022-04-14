@@ -11,7 +11,7 @@ namespace Linq
     {
         public static void Main(string[] args)
         {
-            /* Filtering();
+             Filtering();
              Ordering();
              Quantifiers();
              Ordering();
@@ -22,7 +22,7 @@ namespace Linq
              DataConversion(); 
              Aggregation();
              SetOperations();
-             Joins();*/
+             Joins();
             //Query1(); 
 
             Ex1();

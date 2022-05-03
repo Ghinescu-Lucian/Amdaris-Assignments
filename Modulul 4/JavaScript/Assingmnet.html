@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<title> JavaScript assignment</title>
+
+<body>
+    <h1>
+        Hello world!
+    </h1>
+    <script>
+        // numbers
+        console.log("Numbers");
+        var num1 = 1;
+        var num2 = 1.2;
+
+        var result = num1 + num2;
+        console.log(result);
+        console.log(1 / 0);
+        console.log(isFinite(num1));
+
+        var num3 = '.12.1abc4';
+        console.log(parseFloat(num3)); // =>  0.12
+        console.log(parseFloat('a1.2'));// => NaN
+        // string
+        console.log("String");
+        var str1 = 'abcd';
+        var str2 = 'ABCD';
+        console.log(str1.length);
+        console.log(str2[3]);
+        console.log(str1 == str2);
+        console.log(str1 === str2);
+        console.log(str1.match("^abc*"));
+        var str3 = str2.toLowerCase();
+        console.log(str1 == str3);
+        console.log(str1 === str3);
+
+        var str4 = "1";
+        console.log(str4 == num1);// => true
+        console.log(str4 === num1);// => false
+        /*
+            ==  operator compares only the values of variables,
+            === operator also checks the datatypes first
+        */
+
+        // boolean
+        console.log("Boolean");
+
+        var bool1 = true;
+        var bool2 = false;
+
+        console.log(bool1.valueOf());
+        console.log(bool1 == (!bool2));
+
+
+
+        // null, undefined
+        console.log("Null, Undefined");
+
+        var undefined;
+        var nll = null;
+
+        console.log(undefined);
+        console.log(nll);
+
+
+ // object
+        console.log("Object");
+
+        var user = {};
+        user.firstNmae="Gica";
+        user.lastName="Hagi";
+        console.log(user);
+
+        user.profession="footballer"
+        console.log(user);
+
+    </script>
+
+</body>
+
+</html>

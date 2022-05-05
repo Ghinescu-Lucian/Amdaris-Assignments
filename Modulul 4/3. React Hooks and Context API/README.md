@@ -1,0 +1,1 @@
+ I used hooks in components and App.tsx
